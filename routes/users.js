@@ -19,6 +19,18 @@ router.post("/signup", async (req, res, next) => {
     lastName: req.body.lastName,
     age: req.body.age,
   };
+  const check = await User.findOne({
+    where: {
+      [Op.or]: [{ username: usr.username }, { email: usr.email }],
+    },
+  }).catch((err) => {
+    console.log(err);
+  });
+  if (check) {
+    res.status(400).json({
+      message: "username or email already exist",
+    });
+  }
   const user = await User.create(usr).catch((e) => {
     console.log(e);
   });
@@ -67,6 +79,12 @@ router.post("/login", async (req, res, next) => {
     });
   }
 });
+
+
+
+router.get("/currentuser",(req,res,next)=>{
+  res.status(200).json(req.user);
+})
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 router.post("/createstory", checktoken, async (req, res, next) => {
@@ -109,6 +127,7 @@ router.post("/createTask", checktoken, async (req, res, next) => {
     taskTitle: req.body.taskTitle,
     taskDescription: req.body.taskDescription,
     creator: req.user.username,
+    dueDate: req.body.dueDate,
     status: "pending",
   }).catch((e) => {
     console.log(e);
