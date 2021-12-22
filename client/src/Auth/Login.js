@@ -1,11 +1,6 @@
 import * as React from "react";
-import { useState, useEffect, useContext } from "react";
-import axios from "axios";
-import { BrowserRouter as Router, useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import Cookies from "js-cookie";
-// import { AuthContext } from "../context/AuthContext";
-// import AuthContextProvider from "../context/AuthContext";
-
 import { Context } from "../context/AuthContext";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -14,7 +9,6 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
@@ -44,7 +38,7 @@ const theme = createTheme();
 
 export default function SignIn() {
   const { signIn } = useContext(Context);
-  const { state } = useContext(Context);
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -54,7 +48,7 @@ export default function SignIn() {
       password: data.get("password"),
     };
     const response = await signIn(user);
-    if (response) {
+    if (response.data.auth) {
       Cookies.set("token", response.data.token);
     }
     console.log(response);

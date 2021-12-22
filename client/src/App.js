@@ -6,14 +6,19 @@ import SignUp from "./Auth/Signup";
 import DashBoard from "./components/Dashboard";
 import Cookies from "js-cookie";
 import { Provider, Context } from "./context/AuthContext";
+import ListTodos from "./components/todos/ListTodos";
+
+import Story from "./Story";
 
 const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" exact element={<SignUp />} />
+        <Route path="/signup" exact element={<SignUp />} />
         <Route path="/login" exact element={<SignIn />} />
         <Route path="/dashboard" exact element={<DashBoard />} />
+        <Route path="/todos" element={<ListTodos />} />
+        <Route path="/story" element={<Story />} />
       </Routes>
     </Router>
   );

@@ -5,7 +5,7 @@ const { Todo, TodoItem } = models;
 const todos = {
   async create(req, res, next) {
     try {
-      const { title } = req.body;
+      const title  = req.body.title;
       const creator = req.user.username;
       const todo = await Todo.create({ title, creator });
       return res.status(201).send(todo);

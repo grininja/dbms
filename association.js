@@ -11,7 +11,7 @@ const setassociation = () => {
   // Task.hasOne(User);
   Todo.belongsTo(User, {
     as: "user",
-    foreignKey: "username",
+    foreignKey: "creator",
   });
   Todo.hasMany(TodoItem, {
     as: "todoItems",

@@ -3,11 +3,10 @@ var router = express.Router();
 const dotenv = require("dotenv");
 const { Sequelize, Model, Op } = require("sequelize");
 const model = require("../model");
-const { User, Stories, Task } = model;
+const { User, Stories, Task, Todo, TodoItem } = model;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const checktoken = require("../middlewares/checktoken");
-const todos = require("../controllers/todoItemsController");
 ////////////////////////////////////////////////////////////////////////////////////////////
 router.post("/signup", async (req, res, next) => {
   const salt = await bcrypt.genSalt(10);
@@ -110,10 +109,10 @@ router.get("/getStoryByUser", checktoken, async (req, res, next) => {
   res.status(200).json(stories);
 });
 
-router.delete("/deleteStory", async (req, res, next) => {
+router.delete("/deleteStory/:storyid", async (req, res, next) => {
   const story = await Stories.destroy({
     where: {
-      id: req.body.id,
+      id: req.params.storyid,
     },
   }).catch((e) => {
     console.log(e);
@@ -121,6 +120,22 @@ router.delete("/deleteStory", async (req, res, next) => {
   res.status(200).json(story);
 });
 
+router.put("/getStoryByUser/:storyid", async (req, res, next) => {
+  const story = await Stories.update(
+    {
+      title: req.body.title,
+      description: req.body.description,
+    },
+    {
+      where: {
+        id: req.params.storyid,
+      },
+    }
+  ).catch((e) => {
+    console.log(e);
+  });
+  return res.status(200).json(story);
+});
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 router.post("/createTask", checktoken, async (req, res, next) => {
@@ -164,10 +179,106 @@ router.delete("/deleteTask", checktoken, async (req, res, next) => {
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-router.post("/todos", checktoken, todos.create);
-router.get("/todos", checktoken, todos.fetchAll);
-router.get("/todos/:todoId", checktoken, todos.fetchOne);
-router.put("/todos/:todoId", checktoken, todos.update);
-router.delete("/todos/:todoId", checktoken, todos.delete);
+router.post("/todos", checktoken, async (req, res, next) => {
+  const todo = await Todo.create({
+    title: req.body.title,
+    creator: req.user.username,
+  }).catch((e) => {
+    console.log(e);
+  });
+  res.status(200).json(todo);
+});
+
+router.get("/todos", checktoken, async (req, res, next) => {
+  const todos = await Todo.findAll({
+    where: {
+      creator: req.user.username,
+    },
+  }).catch((e) => {
+    console.log(e);
+  });
+  res.status(200).json(todos);
+});
+
+router.delete("/todos/:todoId", checktoken, async (req, res, next) => {
+  const todo = await Todo.destroy({
+    where: {
+      id: req.params.todoId,
+      creator: req.user.username,
+    },
+  }).catch((e) => {
+    console.log(e);
+  });
+  res.status(200).json(todo);
+});
+
+router.get("/todos/:todoId", checktoken, async (req, res, next) => {
+  const todo = await Todo.findOne({
+    where: {
+      id: req.params.todoId,
+    },
+  }).catch((e) => {
+    console.log(e);
+  });
+  res.status(200).json(todo);
+});
+
+router.post("/todoItems", checktoken, async (req, res, next) => {
+  const todoItem = await TodoItem.create({
+    text: req.body.text,
+    todoId: req.body.todoId,
+  }).catch((e) => {
+    console.log(e);
+  });
+  res.status(200).json(todoItem);
+});
+
+router.get("/todos/:todoId/todoItems", checktoken, async (req, res, next) => {
+  const todoItems = await TodoItem.findAll({
+    where: {
+      todoId: req.params.todoId,
+    },
+  }).catch((e) => {
+    console.log(e);
+  });
+  res.status(200).json(todoItems);
+});
+router.get("/todoItems/:todoItemId", checktoken, async (req, res, next) => {
+  const todoItem = await TodoItem.findOne({
+    where: {
+      id: req.params.todoItemId,
+    },
+  }).catch((e) => {
+    console.log(e);
+  });
+  res.status(200).json(todoItem);
+});
+
+router.put("/todoItems/:todoItemId", checktoken, async (req, res, next) => {
+  const todoItem = await TodoItem.update(
+    {
+      title: req.body.title,
+    },
+    {
+      where: {
+        id: req.params.todoItemId,
+      },
+    }
+  ).catch((e) => {
+    console.log(e);
+  });
+  res.status(200).json(todoItem);
+});
+
+router.delete("/todoItems/:todoItemId", checktoken, async (req, res, next) => {
+  const todoItem = await TodoItem.destroy({
+    where: {
+      id: req.params.todoItemId,
+    },
+  }).catch((e) => {
+    console.log(e);
+  });
+  res.status(200).json(todoItem);
+});
 
 module.exports = router;
