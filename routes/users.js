@@ -7,7 +7,7 @@ const { User, Stories, Task } = model;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const checktoken = require("../middlewares/checktoken");
-
+const todos = require("../controllers/todoItemsController");
 ////////////////////////////////////////////////////////////////////////////////////////////
 router.post("/signup", async (req, res, next) => {
   const salt = await bcrypt.genSalt(10);
@@ -65,11 +65,14 @@ router.post("/login", async (req, res, next) => {
         }
       );
       res.status(200).json({
+        auth: true,
         message: "Successfully logged in",
         token: token,
+        user: user.username,
       });
     } else {
       res.status(401).json({
+        auth: false,
         message: "Incorrect password",
       });
     }
@@ -80,11 +83,9 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-
-
-router.get("/currentuser",(req,res,next)=>{
+router.get("/currentuser", (req, res, next) => {
   res.status(200).json(req.user);
-})
+});
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 router.post("/createstory", checktoken, async (req, res, next) => {
@@ -162,4 +163,11 @@ router.delete("/deleteTask", checktoken, async (req, res, next) => {
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////
+
+router.post("/todos", checktoken, todos.create);
+router.get("/todos", checktoken, todos.fetchAll);
+router.get("/todos/:todoId", checktoken, todos.fetchOne);
+router.put("/todos/:todoId", checktoken, todos.update);
+router.delete("/todos/:todoId", checktoken, todos.delete);
+
 module.exports = router;

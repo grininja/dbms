@@ -3,6 +3,8 @@ const Usermode = require("./models/User");
 const Storymode = require("./models/Stories");
 const Taskmode = require("./models/Task");
 const GroupModel=require("./models/groups");
+const TodoItemModel =require("./models/todoitem");
+const TodoModel=require("./models/todo");
 var env = process.env.NODE_ENV || "development";
 var config = require(__dirname + "/config/config.json")[env];
 
@@ -21,7 +23,9 @@ const models = {
   User: Usermode(sequelize, DataTypes),
   Stories: Storymode(sequelize, DataTypes),
   Task: Taskmode(sequelize, DataTypes),
-  Groups:GroupModel(sequelize,DataTypes)
+  Groups:GroupModel(sequelize,DataTypes),
+  Todo:TodoModel(sequelize,DataTypes),
+  TodoItem:TodoItemModel(sequelize,DataTypes)
 };
 
 module.exports = models;

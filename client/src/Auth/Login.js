@@ -1,4 +1,12 @@
 import * as React from "react";
+import { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { BrowserRouter as Router, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+// import { AuthContext } from "../context/AuthContext";
+// import AuthContextProvider from "../context/AuthContext";
+
+import { Context } from "../context/AuthContext";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,6 +20,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+// import { set } from "../../../app";
 
 function Copyright(props) {
   return (
@@ -34,14 +43,21 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const { signIn } = useContext(Context);
+  const { state } = useContext(Context);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get("email"),
+    const user = {
+      username: data.get("username"),
       password: data.get("password"),
-    });
+    };
+    const response = await signIn(user);
+    if (response) {
+      Cookies.set("token", response.data.token);
+    }
+    console.log(response);
   };
 
   return (
@@ -100,22 +116,11 @@ export default function SignIn() {
             >
               Sign In
             </Button>
-            {/* <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid> */}
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
+      <Link href="/dashboard">click to dashboard</Link>
     </ThemeProvider>
   );
 }
