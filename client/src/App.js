@@ -7,18 +7,21 @@ import DashBoard from "./components/Dashboard";
 import Cookies from "js-cookie";
 import { Provider, Context } from "./context/AuthContext";
 import ListTodos from "./components/todos/ListTodos";
-
-import Story from "./Story";
+import Expense from './Expenses/Expenses';
+import Story from "./Stories/Story";
 
 const App = () => {
+  const {state}=useContext(Context);
   return (
     <Router>
       <Routes>
-        <Route path="/signup" exact element={<SignUp />} />
+        <Route path="/" exact element={<SignUp />} />
         <Route path="/login" exact element={<SignIn />} />
-        <Route path="/dashboard" exact element={<DashBoard />} />
-        <Route path="/todos" element={<ListTodos />} />
-        <Route path="/story" element={<Story />} />
+        {/* <Route path="/dashboard" exact element={<DashBoard />} /> */}
+        {state.isAuthenticated && <Route path="/todos" exact element={<ListTodos />} />}
+        {state.isAuthenticated && <Route path="/story" exact element={<Story />} />}
+        {state.isAuthenticated && <Route path="/expense" exact element={<Expense />} />}
+       
       </Routes>
     </Router>
   );

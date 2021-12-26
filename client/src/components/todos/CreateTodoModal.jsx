@@ -37,7 +37,7 @@ const CreateTodoModal = (props) => {
   return (
     <ModalWrapper>
       <form ref={(node) => (myRef = node)}>
-        <h4 className="text-center">Create Todo</h4>
+        <h4 className="text-center">Set your task</h4>
         <div className="form-group">
           <input
             type="text"
@@ -52,12 +52,6 @@ const CreateTodoModal = (props) => {
           onClick={handleSubmit}
         >
           Save
-        </button>
-        <button
-          className="btn btn-danger float-right mr-1"
-          onClick={closeTodoModal}
-        >
-          Cancel
         </button>
       </form>
     </ModalWrapper>

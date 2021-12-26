@@ -15,6 +15,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Context } from "../context/AuthContext";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   BrowserRouter,
   Link as RouterLink,
@@ -42,6 +43,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
+  let navigate = useNavigate();
   const { signUp } = useContext(Context);
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -55,7 +57,11 @@ export default function SignUp() {
       age: data.get("age"),
     };
     const response = await signUp(user);
-    console.log(response);
+    if (response) {
+      navigate("/login");
+    } else {
+      alert("username or email already exists");
+    }
   };
 
   return (
@@ -74,7 +80,7 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Sign up for Be Productive
           </Typography>
           <Box
             component="form"

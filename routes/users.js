@@ -3,7 +3,7 @@ var router = express.Router();
 const dotenv = require("dotenv");
 const { Sequelize, Model, Op } = require("sequelize");
 const model = require("../model");
-const { User, Stories, Task, Todo, TodoItem } = model;
+const { User, Stories, Task, Todo, TodoItem, Transcations } = model;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const checktoken = require("../middlewares/checktoken");
@@ -75,6 +75,28 @@ router.post("/login", async (req, res, next) => {
         message: "Incorrect password",
       });
     }
+  } else {
+    res.status(401).json({
+      message: "User not found",
+    });
+  }
+});
+
+router.get("/logout", checktoken, async (req, res, next) => {
+  const user = await User.findOne({
+    where: {
+      username: req.user.username,
+    },
+  }).catch((e) => {
+    console.log(e);
+  });
+  if (user) {
+    user.token = null;
+    await user.save();
+    res.status(200).json({
+      auth: true,
+      message: "Successfully logged out",
+    });
   } else {
     res.status(401).json({
       message: "User not found",
@@ -279,6 +301,48 @@ router.delete("/todoItems/:todoItemId", checktoken, async (req, res, next) => {
     console.log(e);
   });
   res.status(200).json(todoItem);
+});
+
+//transcations routes
+
+router.get("/getTransactions", checktoken, async (req, res, next) => {
+  const transcations = await Transcations.findAll({
+    where: {
+      creator: req.user.username,
+    },
+  }).catch((e) => {
+    res.status(400).json(e);
+    console.log(e);
+  });
+  res.status(200).json(transcations);
+});
+
+router.post("/addTransaction", checktoken, (req, res, next) => {
+  const response = Transcations.create({
+    text: req.body.text,
+    amount: req.body.amount,
+    creator: req.user.username,
+  }).catch((e) => {
+    res.status(400).json(e);
+    console.log(e);
+  });
+  res.status(200).json(response);
+});
+
+router.delete("/deleteTransaction/:id", checktoken, (req, res, next) => {
+  Transcations.destroy({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then(() => {
+      res.status(200).json({
+        message: "Transaction Deleted",
+      });
+    })
+    .catch((e) => {
+      res.status(400).json(e);
+    });
 });
 
 module.exports = router;

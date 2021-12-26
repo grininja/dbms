@@ -14,6 +14,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 // import { set } from "../../../app";
 
 function Copyright(props) {
@@ -39,7 +40,7 @@ const theme = createTheme();
 export default function SignIn() {
   const { signIn } = useContext(Context);
 
-
+  let navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -48,8 +49,11 @@ export default function SignIn() {
       password: data.get("password"),
     };
     const response = await signIn(user);
-    if (response.data.auth) {
+    if (response) {
       Cookies.set("token", response.data.token);
+      navigate("/todos");
+    } else {
+      alert("Invalid Credentials");
     }
     console.log(response);
   };
