@@ -1,11 +1,9 @@
-import React, { useContext, useEffect } from 'react';
-import Cookies from 'js-cookie';
-import jwtDecode from 'jwt-decode';
-import { NavLink, useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import jwtDecode from "jwt-decode";
+import { NavLink, useNavigate } from "react-router-dom";
 // import { Nav } from './Styles';
-import { Context as AuthContext } from '../../context/AuthContext';
-
-
+import { Context as AuthContext } from "../../context/AuthContext";
 
 import {
   AppBar,
@@ -21,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(10),
     display: "flex",
   },
- logo: {
+  logo: {
     flexGrow: "1",
     cursor: "pointer",
   },
@@ -38,14 +36,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function NavBar() {
-    const { state: { user }, setCurrentUser } = useContext(AuthContext);
+  const { state, setCurrentUser } = useContext(AuthContext);
   const history = useNavigate();
-
+  const [user, setUser] = useState(null);
   useEffect(() => {
-    if (Cookies.get('token')) {
+    if (Cookies.get("token")) {
       setCurrentUser(Cookies, jwtDecode);
     }
+    (async () => {
+      await setUser(jwtDecode(localStorage.getItem("token")).username);
+    })();
   }, []);
+
+  const handleLogout = () => {
+    Cookies.remove("token");
+    localStorage.removeItem("token");
+    history("/login");
+  };
+
   const classes = useStyles();
 
   return (
@@ -55,29 +63,27 @@ function NavBar() {
         <Typography variant="h4" className={classes.logo}>
           The Productive
         </Typography>
-          <div className={classes.navlinks}>
-            <Link to="/story" className={classes.link}>
-              Your Stories
-            </Link>
-            <Link to="/expense" className={classes.link}>
-              Your Expenses
-            </Link>
-            <Link to="/todos" className={classes.link}>
-             user: {user.username}
-            </Link>
-          </div>
+        <div className={classes.navlinks}>
+          <Link to="/story" className={classes.link}>
+            Your Stories
+          </Link>
+          <Link to="/expense" className={classes.link}>
+            Your Expenses
+          </Link>
+          <Link to="/todos" className={classes.link}>
+            user: {user === null ? "login" : user}
+          </Link>
+          <button onClick={handleLogout}>
+             Logout
+          </button>
+        </div>
       </Toolbar>
     </AppBar>
   );
 }
 export default NavBar;
 
-
-
-
 const mapStateToProps = ({ auth }) => {
   console.log(auth);
-  return { ...auth }
-}
-
-
+  return { ...auth };
+};

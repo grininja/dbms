@@ -10,10 +10,10 @@ const Stories = (Sequelize, DataTypes) => {
     author: {
       type: DataTypes.STRING,
       allowNull: false,
-      references:{
-        model:'users',
-        key:'username'
-      }
+      references: {
+        model: "users",
+        key: "username",
+      },
     },
     title: {
       type: DataTypes.STRING,
@@ -33,6 +33,11 @@ const Stories = (Sequelize, DataTypes) => {
     },
     sharewith: {
       type: DataTypes.STRING,
+      allowNull: true,
+    },
+    image: {
+      type: DataTypes.STRING,
+      dataType: "blob",
       allowNull: true,
     },
   });

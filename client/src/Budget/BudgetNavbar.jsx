@@ -41,7 +41,11 @@ function BudgetNavBar() {
     setCurrentUser,
   } = useContext(AuthContext);
   const history = useNavigate();
-
+  const handleLogout = () => {
+    Cookies.remove("token");
+    localStorage.removeItem("token");
+    history("/login");
+  };
   useEffect(() => {
     if (Cookies.get("token")) {
       setCurrentUser(Cookies, jwtDecode);
@@ -66,6 +70,7 @@ function BudgetNavBar() {
           <Link to="/expense" className={classes.link}>
             user: {user.username}
           </Link>
+          <button onClick={handleLogout}>Logout</button>
         </div>
       </Toolbar>
     </AppBar>
