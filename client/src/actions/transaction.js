@@ -1,5 +1,34 @@
 import apiCall from "../apiCall";
 
+export const getBudget = (dispatch) => async (Cookies) => {
+  try {
+    const response = await apiCall(
+      "/userbudget",
+      "get",
+      null,
+      Cookies.get("token")
+    );
+
+    dispatch({ type: "GET_BUDGET_SUCCESS", payload: response.data });
+  } catch (err) {
+    dispatch({ type: "GET_BUDGET_FAILURE" });
+  }
+};
+
+export const setbudget = (dispatch) => async (amount, Cookies) => {
+  try {
+    const response = await apiCall(
+      "/updateuserbudget",
+      "put",
+      amount,
+      Cookies.get("token")
+    );
+    dispatch({ type: "SET_BUDGET_SUCCESS", payload: response.data });
+  } catch (err) {
+    dispatch({ type: "SET_BUDGET_FAILURE" });
+  }
+};
+
 export const getTransactions = (dispatch) => async (Cookies) => {
   try {
     dispatch({ type: "GET_TRANSACTIONS_LOADING" });

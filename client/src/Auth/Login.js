@@ -51,6 +51,7 @@ export default function SignIn() {
     const response = await signIn(user);
     if (response) {
       Cookies.set("token", response.data.token);
+      localStorage.setItem("token", response.data.token);
       navigate("/todos");
     } else {
       alert("Invalid Credentials");
@@ -118,7 +119,6 @@ export default function SignIn() {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
-      <Link href="/dashboard">click to dashboard</Link>
     </ThemeProvider>
   );
 }

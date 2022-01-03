@@ -1,11 +1,9 @@
-import React, { useContext, useEffect } from 'react';
-import Cookies from 'js-cookie';
-import jwtDecode from 'jwt-decode';
-import { NavLink, useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect } from "react";
+import Cookies from "js-cookie";
+import jwtDecode from "jwt-decode";
+import { NavLink, useNavigate } from "react-router-dom";
 // import { Nav } from './Styles';
-import { Context as AuthContext } from '../../context/AuthContext';
-
-
+import { Context as AuthContext } from "../context/AuthContext";
 
 import {
   AppBar,
@@ -21,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(10),
     display: "flex",
   },
- logo: {
+  logo: {
     flexGrow: "1",
     cursor: "pointer",
   },
@@ -37,12 +35,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function NavBar() {
-    const { state: { user }, setCurrentUser } = useContext(AuthContext);
+function BudgetNavBar() {
+  const {
+    state: { user },
+    setCurrentUser,
+  } = useContext(AuthContext);
   const history = useNavigate();
 
   useEffect(() => {
-    if (Cookies.get('token')) {
+    if (Cookies.get("token")) {
       setCurrentUser(Cookies, jwtDecode);
     }
   }, []);
@@ -55,29 +56,24 @@ function NavBar() {
         <Typography variant="h4" className={classes.logo}>
           The Productive
         </Typography>
-          <div className={classes.navlinks}>
-            <Link to="/story" className={classes.link}>
-              Your Stories
-            </Link>
-            <Link to="/expense" className={classes.link}>
-              Your Expenses
-            </Link>
-            <Link to="/todos" className={classes.link}>
-             user: {user.username}
-            </Link>
-          </div>
+        <div className={classes.navlinks}>
+          <Link to="/todos" className={classes.link}>
+            Your Tasks
+          </Link>
+          <Link to="/story" className={classes.link}>
+            Your Stories
+          </Link>
+          <Link to="/expense" className={classes.link}>
+            user: {user.username}
+          </Link>
+        </div>
       </Toolbar>
     </AppBar>
   );
 }
-export default NavBar;
-
-
-
+export default BudgetNavBar;
 
 const mapStateToProps = ({ auth }) => {
   console.log(auth);
-  return { ...auth }
-}
-
-
+  return { ...auth };
+};

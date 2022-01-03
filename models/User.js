@@ -34,6 +34,10 @@ const User = (Sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    budget: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    }
   });
 
 };

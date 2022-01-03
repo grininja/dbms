@@ -304,7 +304,33 @@ router.delete("/todoItems/:todoItemId", checktoken, async (req, res, next) => {
 });
 
 //transcations routes
-
+///////////////////////////////////////////////////////////////////////////////
+router.get("/userbudget", checktoken, async (req, res, next) => {
+  const user = await User.findOne({
+    where: {
+      username: req.user.username,
+    },
+  }).catch((e) => {
+    res.status(500).json(e);
+  });
+  const userbudget = { budget: user.budget };
+  res.status(200).json(userbudget);
+});
+router.put("/updateuserbudget", checktoken, async (req, res, next) => {
+  const user = await User.update(
+    {
+      budget: req.body.budget,
+    },
+    {
+      where: {
+        username: req.user.username,
+      },
+    }
+  ).catch((e) => {
+    console.log(e);
+  });
+  res.status(200).json(user);
+});
 router.get("/getTransactions", checktoken, async (req, res, next) => {
   const transcations = await Transcations.findAll({
     where: {

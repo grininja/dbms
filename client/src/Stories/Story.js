@@ -6,6 +6,7 @@ import Form from "../components/Form/Form";
 import jwtDecode from "jwt-decode";
 import useStyles from "./styles";
 import memories from "../images/memories.png";
+import StoryNavBar from "./StoriesNavbar";
 import {
   Context as StoryContext,
   Provider as StoryProvider,
@@ -28,42 +29,51 @@ const Story = () => {
   const [currentId, setCurrentId] = useState(0);
   const classes = useStyles();
   return (
-    <Container maxWidth="lg">
-      <AppBar className={classes.appBar} position="static" color="inherit">
-        <Typography className={classes.heading} variant="h2" align="center">
-          Your Memories
-        </Typography>
-        <img className={classes.image} src={memories} alt="icon" height="60" />
-      </AppBar>
-      <Toolbar>
-        <div className={classes.navlinks}>
-          <Link to="/story" className={classes.link}>
-            Your Stories
-            {`\n`}
-          </Link>
-          <Link to="/todos" className={classes.link}>
-            user: {user.username}
-          </Link>
-        </div>
-      </Toolbar>
-      <Grow in>
-        <Container>
-          <Grid
-            container
-            justify="space-between"
-            alignItems="stretch"
-            spacing={3}
-          >
-            <Grid item xs={12} sm={7}>
-              <Posts setCurrentId={setCurrentId} />
+    <div>
+      {" "}
+      <StoryNavBar />
+      <Container maxWidth="lg">
+        <AppBar className={classes.appBar} position="static" color="inherit">
+          <Typography className={classes.heading} variant="h2" align="center">
+            Your Memories
+          </Typography>
+          <img
+            className={classes.image}
+            src={memories}
+            alt="icon"
+            height="60"
+          />
+        </AppBar>
+        <Toolbar>
+          <div className={classes.navlinks}>
+            <Link to="/story" className={classes.link}>
+              Your Stories
+              {`\n`}
+            </Link>
+            <Link to="/todos" className={classes.link}>
+              user: {user.username}
+            </Link>
+          </div>
+        </Toolbar>
+        <Grow in>
+          <Container>
+            <Grid
+              container
+              justify="space-between"
+              alignItems="stretch"
+              spacing={3}
+            >
+              <Grid item xs={12} sm={7}>
+                <Posts setCurrentId={setCurrentId} />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <Form currentId={currentId} setCurrentId={setCurrentId} />
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={4}>
-              <Form currentId={currentId} setCurrentId={setCurrentId} />
-            </Grid>
-          </Grid>
-        </Container>
-      </Grow>
-    </Container>
+          </Container>
+        </Grow>
+      </Container>
+    </div>
   );
 };
 

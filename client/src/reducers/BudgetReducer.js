@@ -1,18 +1,31 @@
-import { intitialState } from "../context/TranscationContext";
+import { intitialState } from "../context/BudgetContext";
 
-const transaction = (state = intitialState, action) => {
+const Budget = (state = intitialState, action) => {
   switch (action.type) {
-    case "GET_TRANSACTIONS_LOADING":
-      return { ...state, loading: true, error: "" };
-    case "GET_TRANSACTIONS_SUCCESS":
+    case "GET_BUDGET_SUCCESS":
       return {
         ...state,
         loading: false,
         error: "",
-        expense: action.payload,
+        budget: action.payload.budget,
       };
+    case "GET_BUDGET_FAILURE":
+      return { ...state, loading: false };
+    case "SET_BUDGET_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        error: "",
+        budget: action.payload.budget,
+      };
+    case "SET_BUDGET_FAILURE":
+      return { ...state, loading: false };
+    case "GET_TRANSACTIONS_LOADING":
+      return { ...state, loading: true, error: "" };
+    case "GET_TRANSACTIONS_SUCCESS":
+      return { ...state, loading: false, error: "", expense: action.payload };
     case "GET_TRANSACTIONS_FAILURE":
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false };
     case "ADD_TRANSACTION_LOADING":
       return { ...state, loading: true, error: "" };
     case "ADD_TRANSACTION_SUCCESS":
@@ -23,7 +36,7 @@ const transaction = (state = intitialState, action) => {
         expense: [...state.expense, action.payload],
       };
     case "ADD_TRANSACTION_FAILURE":
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false };
     case "DELETE_TRANSACTION_LOADING":
       return { ...state, loading: true, error: "" };
     case "DELETE_TRANSACTION_SUCCESS":
@@ -37,9 +50,7 @@ const transaction = (state = intitialState, action) => {
       };
     case "DELETE_TRANSACTION_FAILURE":
       return { ...state, loading: false, error: action.payload };
-    default:
-      return state;
   }
 };
 
-export default transaction;
+export default Budget;

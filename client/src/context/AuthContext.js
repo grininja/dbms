@@ -4,7 +4,7 @@ import { signUp, signIn, setCurrentUser } from '../actions';
 
 export const initialState = {
   user: null,
-  isAuthenticated: false,
+  isAuthenticated:false,
   signUpErr: '',
   signInErr: ''
 };
