@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+  import React, { useContext, useState } from "react";
 import {
   Card,
   CardActions,
@@ -40,7 +40,7 @@ const Post = ({ post, setCurrentId }) => {
           {moment(post.createdAt).fromNow()}
         </Typography>
       </div>
-      <div className={classes.overlay2}>
+      {/* <div className={classes.overlay2}>
         <Button
           style={{ color: "white" }}
           size="small"
@@ -48,7 +48,7 @@ const Post = ({ post, setCurrentId }) => {
         >
           <MoreHorizIcon fontSize="default" />
         </Button>
-      </div>
+      </div> */}
       <Typography
         className={classes.title}
         gutterBottom

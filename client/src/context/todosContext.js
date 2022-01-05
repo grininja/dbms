@@ -1,6 +1,6 @@
 import createDataContext from './createDataContext';
 import todosReducer from '../reducers/todos';
-import { createTodo, fetchTodos, createTask, markTaskAsDone, deleteTodo } from '../actions/todos';
+import { createTodo, fetchTodos, createTask, markTaskAsDone, deleteTodo,getTask,deleteTask } from '../actions/todos';
 
 export const initialState = {
   createTodoError: '',
@@ -10,7 +10,7 @@ export const initialState = {
 
 export const { Context, Provider } = createDataContext(
   todosReducer,
-  { createTodo, fetchTodos, createTask, markTaskAsDone, deleteTodo },
+  { createTodo, fetchTodos, createTask, markTaskAsDone, deleteTodo,getTask,deleteTask },
   initialState
 );
 

@@ -57,3 +57,25 @@ export const markTaskAsDone = (dispatch) => async (task) => {
     return dispatch({ type: 'MARK_AS_DONE_FAILURE', payload: err.response.data });
   }
 }
+
+export const getTask=(dispatch)=> async (taskId, Cookies) => {
+  try {
+    dispatch({ type: 'GET_TASK_LOADING' });
+    const res = await apiCall(`/todoItems/${taskId}`, 'get', null, Cookies.get('token'));
+    dispatch({ type: 'GET_TASK_SUCCESS', payload: res.data });
+    return res;
+  } catch (err) {
+    return dispatch({ type: 'GET_TASK_FAILURE', payload: err.response.data });
+  }
+}
+
+export const deleteTask=(dispatch)=>async(taskid,Cookies)=>{
+  try{
+    dispatch({type:'DELETE_TASK_LOADING'});
+    const res=await apiCall(`/todoItems/${taskid}`, 'delete', null, Cookies.get('token'));
+    dispatch({type:'DELETE_TASK_SUCCESS',payload:res.data});
+    return res;
+  }catch(err){
+    return dispatch({type:'DELETE_TASK_FAILURE',payload:err.response.data});
+  }
+}

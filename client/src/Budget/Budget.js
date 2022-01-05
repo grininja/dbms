@@ -1,6 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import Footer from "../components/layouts/Footer";
 import { Provider as BudgetProvider } from "../context/BudgetContext";
 import Budget from "../components/Budget/Budget";
 import ExpenseTotal from "../components/Budget/ExpenseTotal";
@@ -37,6 +37,7 @@ const Expense = () => {
             <AddExpenseForm />
           </div>
         </div>
+        <Footer/>
       </div>
     </BudgetProvider>
   );

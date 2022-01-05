@@ -15,7 +15,7 @@ const AddExpenseForm = (props) => {
     };
 
     addTransaction(expense, Cookie);
-
+    window.location.reload();
     setName("");
     setCost("");
   };

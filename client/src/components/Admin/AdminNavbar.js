@@ -4,10 +4,7 @@ import jwtDecode from "jwt-decode";
 import { NavLink, useNavigate } from "react-router-dom";
 // import { Nav } from './Styles';
 import { Context as AuthContext } from "../../context/AuthContext";
-import {
-  Context as AdminContext,
-  Provider as AdminProvider,
-} from "../../context/AdminContext";
+
 
 import {
   AppBar,
@@ -39,8 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function NavBar() {
-  const {state:AdminState}=useContext(AdminContext);
+function AdminNavBar() {
   const { state, setCurrentUser } = useContext(AuthContext);
   const history = useNavigate();
   const [user, setUser] = useState(null);
@@ -69,11 +65,6 @@ function NavBar() {
           The Productive
         </Typography>
         <div className={classes.navlinks}>
-          {AdminState.isAdmin && (
-             <Link to="/admin" className={classes.link}>
-             AdminDashBoard
-           </Link>
-          )}
           <Link to="/story" className={classes.link}>
             Your Stories
           </Link>
@@ -91,7 +82,7 @@ function NavBar() {
     </AppBar>
   );
 }
-export default NavBar;
+export default AdminNavBar;
 
 const mapStateToProps = ({ auth }) => {
   console.log(auth);

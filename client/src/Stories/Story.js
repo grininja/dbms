@@ -7,6 +7,7 @@ import jwtDecode from "jwt-decode";
 import useStyles from "./styles";
 import memories from "../images/memories.png";
 import StoryNavBar from "./StoriesNavbar";
+import Footer from "../components/layouts/Footer";
 import {
   Context as StoryContext,
   Provider as StoryProvider,
@@ -73,6 +74,7 @@ const Story = () => {
           </Container>
         </Grow>
       </Container>
+      <Footer/>
     </div>
   );
 };

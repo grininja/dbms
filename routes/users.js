@@ -3,7 +3,7 @@ var router = express.Router();
 const dotenv = require("dotenv");
 const { Sequelize, Model, Op } = require("sequelize");
 const model = require("../model");
-const { User, Stories, Task, Todo, TodoItem, Transcations } = model;
+const { User, Stories, Task, Todo, TodoItem, Transcations, Admin } = model;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const checktoken = require("../middlewares/checktoken");
@@ -79,6 +79,90 @@ router.post("/login", async (req, res, next) => {
     res.status(401).json({
       message: "User not found",
     });
+  }
+});
+
+router.get("/isAdmin", checktoken, async (req, res, next) => {
+  const isadmin = await Admin.findAll({
+    where: {
+      username: req.user.username,
+    },
+  }).catch((e) => {
+    console.log(e);
+  });
+  // console.log(isadmin);
+  if (isadmin.length > 0) {
+    res.status(200).json({
+      isadmin: true,
+    });
+  } else {
+    res.status(200).json({
+      isadmin: false,
+    });
+  }
+});
+
+router.get("/fetchUserList", checktoken, async (req, res, next) => {
+  const users = await User.findAll({
+    where: {
+      username: {
+        [Op.ne]: req.user.username,
+      },
+    },
+  }).catch((e) => {
+    console.log(e);
+  });
+  const admins = await Admin.findAll({
+    where: {
+      username: {
+        [Op.ne]: req.user.username,
+      },
+    },
+  }).catch((e) => {
+    console.log(e);
+  });
+  users.filter((user) => {
+    admins.filter((admin) => {
+      if (user.username === admin.username) {
+        users.splice(users.indexOf(user), 1);
+      }
+    });
+  });
+  res.status(200).json(users);
+});
+
+router.get("/deleteuser/:username", checktoken, async (req, res, next) => {
+  const user = await User.findOne({
+    where: {
+      username: req.params.username,
+    },
+  }).catch((e) => {
+    console.log(e);
+  });
+  if (user) {
+    const check = await Admin.findOne({
+      where: {
+        username: req.user.username,
+      },
+    }).catch((e) => {
+      console.log(e);
+    });
+    if (check) {
+      const del = await User.destroy({
+        where: {
+          username: req.params.username,
+        },
+      }).catch((e) => {
+        console.log(e);
+      });
+      res.status(200).json({
+        message: "user deleted",
+      });
+    } else {
+      res.status(401).json({
+        message: "you are not admin",
+      });
+    }
   }
 });
 
@@ -255,38 +339,12 @@ router.post("/todoItems", checktoken, async (req, res, next) => {
   res.status(200).json(todoItem);
 });
 
-router.get("/todos/:todoId/todoItems", checktoken, async (req, res, next) => {
-  const todoItems = await TodoItem.findAll({
-    where: {
-      todoId: req.params.todoId,
-    },
-  }).catch((e) => {
-    console.log(e);
-  });
-  res.status(200).json(todoItems);
-});
 router.get("/todoItems/:todoItemId", checktoken, async (req, res, next) => {
   const todoItem = await TodoItem.findOne({
     where: {
-      id: req.params.todoItemId,
+      todoId: req.params.todoItemId,
     },
   }).catch((e) => {
-    console.log(e);
-  });
-  res.status(200).json(todoItem);
-});
-
-router.put("/todoItems/:todoItemId", checktoken, async (req, res, next) => {
-  const todoItem = await TodoItem.update(
-    {
-      title: req.body.title,
-    },
-    {
-      where: {
-        id: req.params.todoItemId,
-      },
-    }
-  ).catch((e) => {
     console.log(e);
   });
   res.status(200).json(todoItem);

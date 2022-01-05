@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ReactDOM } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SignIn from "./Auth/Login";
@@ -8,9 +8,17 @@ import { Provider, Context } from "./context/AuthContext";
 import ListTodos from "./components/todos/ListTodos";
 import Expense from "./Budget/Budget";
 import Story from "./Stories/Story";
+import AdminDashboard from "./components/Admin/AdminDahboard";
+import {
+  Context as AdminContext,
+  Provider as AdminProvider,
+} from "./context/AdminContext";
+
 
 const App = () => {
+  const { state: AdminState } = useContext(AdminContext);
   const { state } = useContext(Context);
+
   return (
     <Router>
       <Routes>
@@ -28,6 +36,8 @@ const App = () => {
         {!state.isAuthenticated && (
           <Route path="*" exact element={<SignUp />} />
         )}
+        <Route path="/admin" exact element={<AdminDashboard />} />
+
       </Routes>
     </Router>
   );
@@ -35,8 +45,10 @@ const App = () => {
 
 export default () => {
   return (
+    <AdminProvider>
     <Provider>
-      <App />
+        <App />
     </Provider>
+    </AdminProvider>
   );
 };
