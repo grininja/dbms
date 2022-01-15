@@ -1,7 +1,7 @@
 const { Sequelize, Model, Op } = require("sequelize");
 // const { Admin } = require("./model");
 const models = require("./model");
-const { User, Stories, Todo, TodoItem, Transcations, Admin } = models;
+const { User, Stories, Todo, Transcations, Admin } = models;
 
 const setassociation = () => {
   User.hasMany(Stories, { foreignKey: "author", targetKey: "author" });
@@ -11,11 +11,11 @@ const setassociation = () => {
     targetKey: "creator",
     onDelete: "cascade",
   });
-  Todo.hasMany(TodoItem, {
-    foreignKey: "todoId",
-    targetKey: "todoId",
-    onDelete: "cascade",
-  });
+  // Todo.hasMany(TodoItem, {
+  //   foreignKey: "todoId",
+  //   targetKey: "todoId",
+  //   onDelete: "cascade",
+  // });
   User.hasMany(Transcations, {
     foreignKey: "creator",
     targetKey: "creator",
@@ -25,10 +25,10 @@ const setassociation = () => {
     as: "user",
     foreignKey: "creator",
   });
-  Todo.hasMany(TodoItem, {
-    as: "todoItems",
-    foreignKey: "todoId",
-  });
+  // Todo.hasMany(TodoItem, {
+  //   as: "todoItems",
+  //   foreignKey: "todoId",
+  // });
   Transcations.belongsTo(User, {
     as: "user",
     foreignKey: "creator",

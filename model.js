@@ -1,7 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const Usermode = require("./models/User");
 const Storymode = require("./models/Stories");
-const TodoItemModel = require("./models/todoitem");
 const TodoModel = require("./models/todo");
 const TranscationsModel = require("./models/transcations");
 const Admin=require("./models/Admin");
@@ -24,7 +23,6 @@ const models = {
   User: Usermode(sequelize, DataTypes),
   Stories: Storymode(sequelize, DataTypes),
   Todo: TodoModel(sequelize, DataTypes),
-  TodoItem: TodoItemModel(sequelize, DataTypes),
   Transcations: TranscationsModel(sequelize, DataTypes),
   Admin:Admin(sequelize,DataTypes)
 };

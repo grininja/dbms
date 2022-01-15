@@ -22,6 +22,12 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
+import {
+  validFirstName,
+  validLastName,
+  validEmail,
+  validusername,
+} from "./validate";
 function Copyright(props) {
   return (
     <Typography
@@ -40,6 +46,24 @@ function Copyright(props) {
   );
 }
 
+const validate = (firstName, lastName, email, username) => {
+  let errors = {};
+  if (!validFirstName.test(firstName)) {
+    errors.firstName = "Invalid First Name";
+  }
+  if (!validLastName.test(lastName)) {
+    errors.lastName = "Invalid Last Name";
+  }
+  if (!validEmail.test(email)) {
+    errors.email = "Invalid Email";
+  }
+  if (!validusername.test(username)) {
+    errors.username =
+      "Invalid Username (username should be 3-20 characters long)";
+  }
+  return errors;
+};
+
 const theme = createTheme();
 
 export default function SignUp() {
@@ -52,15 +76,35 @@ export default function SignUp() {
       firstName: data.get("firstName"),
       lastName: data.get("lastName"),
       email: data.get("email"),
-      password: data.get("password"),
       username: data.get("username"),
       age: data.get("age"),
     };
-    const response = await signUp(user);
-    if (response) {
-      navigate("/login");
+    const errors = validate(
+      user.firstName,
+      user.lastName,
+      user.email,
+      user.username
+    );
+    if (
+      errors.firstName ||
+      errors.lastName ||
+      errors.email ||
+      errors.username
+    ) {
+      console.log(errors);
+      var message = "";
+      for (var key in errors) {
+        message += errors[key] + "\n";
+      }
+      alert(`${message}`);
     } else {
-      alert("username or email already exists");
+      const response = await signUp(user);
+
+      if (response) {
+        navigate("/login");
+      } else {
+        alert("username or email already exists");
+      }
     }
   };
 
@@ -130,7 +174,7 @@ export default function SignUp() {
                   autoComplete="username"
                 />
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -140,7 +184,7 @@ export default function SignUp() {
                   id="password"
                   autoComplete="new-password"
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12}>
                 <TextField
                   required

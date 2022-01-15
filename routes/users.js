@@ -3,16 +3,18 @@ var router = express.Router();
 const dotenv = require("dotenv");
 const { Sequelize, Model, Op } = require("sequelize");
 const model = require("../model");
-const { User, Stories, Task, Todo, TodoItem, Transcations, Admin } = model;
+const { User, Stories, Task, Todo, Transcations, Admin } = model;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const checktoken = require("../middlewares/checktoken");
+const sendmail = require("../middlewares/sendmail");
 ////////////////////////////////////////////////////////////////////////////////////////////
 router.post("/signup", async (req, res, next) => {
   const salt = await bcrypt.genSalt(10);
+  var otp = Math.floor(100000 + Math.random() * 900000).toString();
   var usr = {
     username: req.body.username,
-    password: await bcrypt.hash(req.body.password, salt),
+    password: await bcrypt.hash(otp, salt),
     email: req.body.email,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -33,6 +35,22 @@ router.post("/signup", async (req, res, next) => {
   const user = await User.create(usr).catch((e) => {
     console.log(e);
   });
+  const sendmai = await sendmail(
+    usr.email,
+    "your password  for login is ",
+    `<h1>${otp}</h1>
+    <h2>you can change password in change password section</h2>
+    `,
+    (info) => {
+      console.log(info);
+      res.status(200).json({ message: "OTP sent to your email" });
+    },
+    (err) => {
+      console.log(err);
+      res.status(400).json({ message: "OTP not sent" });
+    }
+  );
+
   res.status(200).json(user);
 });
 
@@ -191,6 +209,7 @@ router.get("/logout", checktoken, async (req, res, next) => {
 router.get("/currentuser", (req, res, next) => {
   res.status(200).json(req.user);
 });
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 router.post("/createstory", checktoken, async (req, res, next) => {
@@ -329,37 +348,37 @@ router.get("/todos/:todoId", checktoken, async (req, res, next) => {
   res.status(200).json(todo);
 });
 
-router.post("/todoItems", checktoken, async (req, res, next) => {
-  const todoItem = await TodoItem.create({
-    text: req.body.text,
-    todoId: req.body.todoId,
-  }).catch((e) => {
-    console.log(e);
-  });
-  res.status(200).json(todoItem);
-});
+// router.post("/todoItems", checktoken, async (req, res, next) => {
+//   const todoItem = await TodoItem.create({
+//     text: req.body.text,
+//     todoId: req.body.todoId,
+//   }).catch((e) => {
+//     console.log(e);
+//   });
+//   res.status(200).json(todoItem);
+// });
 
-router.get("/todoItems/:todoItemId", checktoken, async (req, res, next) => {
-  const todoItem = await TodoItem.findOne({
-    where: {
-      todoId: req.params.todoItemId,
-    },
-  }).catch((e) => {
-    console.log(e);
-  });
-  res.status(200).json(todoItem);
-});
+// router.get("/todoItems/:todoItemId", checktoken, async (req, res, next) => {
+//   const todoItem = await TodoItem.findOne({
+//     where: {
+//       todoId: req.params.todoItemId,
+//     },
+//   }).catch((e) => {
+//     console.log(e);
+//   });
+//   res.status(200).json(todoItem);
+// });
 
-router.delete("/todoItems/:todoItemId", checktoken, async (req, res, next) => {
-  const todoItem = await TodoItem.destroy({
-    where: {
-      id: req.params.todoItemId,
-    },
-  }).catch((e) => {
-    console.log(e);
-  });
-  res.status(200).json(todoItem);
-});
+// router.delete("/todoItems/:todoItemId", checktoken, async (req, res, next) => {
+//   const todoItem = await TodoItem.destroy({
+//     where: {
+//       id: req.params.todoItemId,
+//     },
+//   }).catch((e) => {
+//     console.log(e);
+//   });
+//   res.status(200).json(todoItem);
+// });
 
 //transcations routes
 ///////////////////////////////////////////////////////////////////////////////
