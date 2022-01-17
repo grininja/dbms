@@ -67,6 +67,9 @@ function StoryNavBar() {
           <Link to="/expense" className={classes.link}>
             Your Expenses
           </Link>
+          <Link to="/changepassword" className={classes.link}>
+            Change Password
+          </Link>
           <Link to="/story" className={classes.link}>
             user: {user.username}
           </Link>

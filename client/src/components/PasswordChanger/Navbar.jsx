@@ -1,13 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 import { NavLink, useNavigate } from "react-router-dom";
 // import { Nav } from './Styles';
 import { Context as AuthContext } from "../../context/AuthContext";
-import {
-  Context as AdminContext,
-  Provider as AdminProvider,
-} from "../../context/AdminContext";
 
 import {
   AppBar,
@@ -39,26 +35,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function NavBar() {
-  const { state: AdminState } = useContext(AdminContext);
-  const { state, setCurrentUser } = useContext(AuthContext);
+function ChangePassNavbar() {
+  const {
+    state: { user },
+    setCurrentUser,
+  } = useContext(AuthContext);
   const history = useNavigate();
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-    if (Cookies.get("token")) {
-      setCurrentUser(Cookies, jwtDecode);
-    }
-    (async () => {
-      await setUser(jwtDecode(localStorage.getItem("token")).username);
-    })();
-  }, []);
-
   const handleLogout = () => {
     Cookies.remove("token");
     localStorage.removeItem("token");
     history("/login");
   };
-
+  useEffect(() => {
+    if (Cookies.get("token")) {
+      setCurrentUser(Cookies, jwtDecode);
+    }
+  }, []);
   const classes = useStyles();
 
   return (
@@ -69,22 +61,17 @@ function NavBar() {
           The Productive
         </Typography>
         <div className={classes.navlinks}>
-          {AdminState.isAdmin && (
-            <Link to="/admin" className={classes.link}>
-              AdminDashBoard
-            </Link>
-          )}
+          <Link to="/todos" className={classes.link}>
+            Your Tasks
+          </Link>
           <Link to="/story" className={classes.link}>
             Your Stories
-          </Link>
-          <Link to="/expense" className={classes.link}>
-            Your Expenses
           </Link>
           <Link to="/changepassword" className={classes.link}>
             Change Password
           </Link>
-          <Link to="/todos" className={classes.link}>
-            user: {user === null ? "login" : user}
+          <Link to="/changepassword" className={classes.link}>
+            user: {user.username}
           </Link>
 
           <button onClick={handleLogout}>Logout</button>
@@ -93,7 +80,7 @@ function NavBar() {
     </AppBar>
   );
 }
-export default NavBar;
+export default ChangePassNavbar;
 
 const mapStateToProps = ({ auth }) => {
   console.log(auth);

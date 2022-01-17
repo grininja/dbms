@@ -67,6 +67,9 @@ function BudgetNavBar() {
           <Link to="/story" className={classes.link}>
             Your Stories
           </Link>
+          <Link to="/changepassword" className={classes.link}>
+            Change Password
+          </Link>
           <Link to="/expense" className={classes.link}>
             user: {user.username}
           </Link>

@@ -54,6 +54,20 @@ router.post("/signup", async (req, res, next) => {
   res.status(200).json(user);
 });
 
+router.put("/updatepassword", checktoken, async (req, res, next) => {
+  const salt = await bcrypt.genSalt(10);
+  const user = await User.findOne({
+    where: {
+      id: req.user.id,
+    },
+  });
+  user.password = await bcrypt.hash(req.body.password, salt);
+  await user.save().catch((err) => {
+    res.status(400).json({ message: "password not updated" });
+  });
+  res.status(200).json({ message: "password updated" });
+});
+
 router.post("/login", async (req, res, next) => {
   const user = await User.findOne({
     where: {
