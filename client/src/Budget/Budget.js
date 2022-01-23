@@ -8,10 +8,11 @@ import ExpenseList from "../components/Budget/ExpenseList";
 import AddExpenseForm from "../components/Budget/AddExpenseForm";
 import RemainingBudget from "../components/Budget/Remaining";
 import BudgetNavbar from './BudgetNavbar'
+import BudgetNavbar2 from "./BudgetNavbar2";
 const Expense = () => {
   return (
     <BudgetProvider>
-      <BudgetNavbar/>
+      <BudgetNavbar2/>
       <div className="container">
         <h1 className="mt-3">My Budget Planner</h1>
         <div className="row mt-3">

@@ -15,8 +15,9 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import ForgotPassword from "../components/ForgotPassword/ForgotPassword";
 // import { set } from "../../../app";
-
+import Grid from "@mui/material/Grid";
 function Copyright(props) {
   return (
     <Typography
@@ -103,10 +104,10 @@ export default function SignIn() {
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            /> */}
             <Button
               type="submit"
               fullWidth
@@ -115,6 +116,11 @@ export default function SignIn() {
             >
               Sign In
             </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <ForgotPassword />
+              </Grid>
+            </Grid>
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />

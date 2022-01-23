@@ -10,6 +10,7 @@ import Expense from "./Budget/Budget";
 import Story from "./Stories/Story";
 import AdminDashboard from "./components/Admin/AdminDahboard";
 import PassChanger from "./components/PasswordChanger/ChangePass";
+import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
 import {
   Context as AdminContext,
   Provider as AdminProvider,
@@ -37,6 +38,7 @@ const App = () => {
         {state.isAuthenticated && (
           <Route path="/changepassword" exact element={<PassChanger />} />
         )}
+        {/* <Route path="/forgotpassword" exact element={<ForgotPassword />} /> */}
         {!state.isAuthenticated && (
           <Route path="*" exact element={<SignUp />} />
         )}

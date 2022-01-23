@@ -54,6 +54,41 @@ router.post("/signup", async (req, res, next) => {
   res.status(200).json(user);
 });
 
+router.post("/forgotPassword", async (req, res, next) => {
+  const user = await User.findOne({ where: { email: req.body.email } }).catch(
+    (err) => {
+      console.log(err);
+    }
+  );
+  if (!user) {
+    res.status(400).json({ message: "email not found" });
+  }
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  const salt = await bcrypt.genSalt(10);
+  const newpassword = await bcrypt.hash(otp, salt);
+  const update = await User.update(
+    { password: newpassword },
+    { where: { email: req.body.email } }
+  ).catch((err) => {
+    console.log(err);
+  });
+  const resofemail = await sendmail(
+    req.body.email,
+    "your password for login is ",
+    `<h1>${otp}</h1>
+    <h2>you can change password in change password section</h2>
+    `,
+    (info) => {
+      console.log(info);
+      res.status(200).json({ message: "success" });
+    },
+    (err) => {
+      console.log(err);
+      res.status(400).json({ message: "password not sent some error occured" });
+    }
+  );
+});
+
 router.put("/updatepassword", checktoken, async (req, res, next) => {
   const salt = await bcrypt.genSalt(10);
   const user = await User.findOne({

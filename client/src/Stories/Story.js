@@ -15,6 +15,7 @@ import {
 import { NavLink, useNavigate, Link } from "react-router-dom";
 import { Context as AuthContext } from "../context/AuthContext";
 import { Toolbar } from "@mui/material";
+import MemoryNavbar from "./StoryNavbarv2";
 const Story = () => {
   const {
     state: { user },
@@ -32,7 +33,7 @@ const Story = () => {
   return (
     <div>
       {" "}
-      <StoryNavBar />
+      <MemoryNavbar />
       <Container maxWidth="lg">
         <AppBar className={classes.appBar} position="static" color="inherit">
           <Typography className={classes.heading} variant="h2" align="center">
