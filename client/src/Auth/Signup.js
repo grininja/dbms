@@ -27,6 +27,7 @@ import {
   validLastName,
   validEmail,
   validusername,
+  validage,
 } from "./validate";
 function Copyright(props) {
   return (
@@ -46,7 +47,7 @@ function Copyright(props) {
   );
 }
 
-const validate = (firstName, lastName, email, username) => {
+const validate = (firstName, lastName, email, username, age) => {
   let errors = {};
   if (!validFirstName.test(firstName)) {
     errors.firstName = "Invalid First Name";
@@ -60,6 +61,16 @@ const validate = (firstName, lastName, email, username) => {
   if (!validusername.test(username)) {
     errors.username =
       "Invalid Username (username should be 3-20 characters long)";
+  }
+  if (
+    Number.isInteger(age) === false ||
+    (Number.isInteger(age) === true && (age < 10 || age > 100))
+  ) {
+    if (Number.isInteger(age) === false) {
+      errors.age = "Age should be a number";
+    } else {
+      errors.age = "Age should be between 10 and 100";
+    }
   }
   return errors;
 };
@@ -79,17 +90,20 @@ export default function SignUp() {
       username: data.get("username"),
       age: data.get("age"),
     };
+    const age = parseInt(data.get("age"));
     const errors = validate(
       user.firstName,
       user.lastName,
       user.email,
-      user.username
+      user.username,
+      age
     );
     if (
       errors.firstName ||
       errors.lastName ||
       errors.email ||
-      errors.username
+      errors.username ||
+      errors.age
     ) {
       console.log(errors);
       var message = "";
@@ -99,7 +113,7 @@ export default function SignUp() {
       alert(`${message}`);
     } else {
       const response = await signUp(user);
-
+     console.log(response);
       if (response) {
         navigate("/login");
       } else {

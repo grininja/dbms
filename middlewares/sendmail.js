@@ -6,7 +6,7 @@ const mailPass = config.MAIL_PASSWORD;
 const clientId = config.OAUTH_CLIENTID;
 const clientSecret = config.OAUTH_CLIENT_SECRET;
 const refreshToken = config.OAUTH_REFRESH_TOKEN;
-console.log(mailUser);
+// console.log(mailUser);
 
 const SendMail =  (email, subject, htmlBody, onSuccess, onError) => {
   let transporter = nodemailer.createTransport({
@@ -36,5 +36,8 @@ const SendMail =  (email, subject, htmlBody, onSuccess, onError) => {
   });
 
 };
+
+
+
 
 module.exports = SendMail;

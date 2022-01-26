@@ -20,9 +20,12 @@ const Budget = () => {
     const data = {
       budget: value,
     };
-
+    if (!Number.isInteger(value) || (Number.isInteger(value) && value < 0)) {
+      alert("Please enter a valid positive budget");
+      return;
+    }
     await setbudget(data, Cookie);
-    
+
     setIsEditing(false);
   };
 

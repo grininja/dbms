@@ -116,6 +116,13 @@ export default function SignIn() {
             >
               Sign In
             </Button>
+            <Grid container justifyContent="flex-start">
+              <Grid item>
+                <Link href="/">
+                  Sign up
+                </Link>
+              </Grid>
+            </Grid>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <ForgotPassword />

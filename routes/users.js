@@ -8,6 +8,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const checktoken = require("../middlewares/checktoken");
 const sendmail = require("../middlewares/sendmail");
+var schedule = require("node-schedule");
 ////////////////////////////////////////////////////////////////////////////////////////////
 router.post("/signup", async (req, res, next) => {
   const salt = await bcrypt.genSalt(10);
@@ -32,26 +33,44 @@ router.post("/signup", async (req, res, next) => {
       message: "username or email already exist",
     });
   }
-  const user = await User.create(usr).catch((e) => {
-    console.log(e);
-  });
+
   const sendmai = await sendmail(
     usr.email,
     "your password  for login is ",
     `<h1>${otp}</h1>
-    <h2>you can change password in change password section</h2>
+    <h2>Login within 5 mintues else you have to again signup</h2>
     `,
     (info) => {
-      console.log(info);
+      // console.log(info);
       res.status(200).json({ message: "OTP sent to your email" });
     },
     (err) => {
-      console.log(err);
-      res.status(400).json({ message: "OTP not sent" });
+      // console.log(err);
+      res.status(400).json({ message: "error in sending mail" });
     }
   );
+  // console.log(sendmai);
+ 
+
+  const user = await User.create(usr).catch((e) => {
+    console.log(e);
+  });
 
   res.status(200).json(user);
+  let date = new Date();
+  date.setMinutes(date.getMinutes() + 5);
+
+  schedule.scheduleJob(date, async () => {
+    const user = await User.findOne({
+      where: {
+        username: usr.username,
+      },
+    });
+    if (user && user.hasLogin == false) {
+      user.destroy();
+    }
+  });
+
 });
 
 router.post("/forgotPassword", async (req, res, next) => {
@@ -136,6 +155,9 @@ router.post("/login", async (req, res, next) => {
         token: token,
         user: user.username,
       });
+     const up=await User.update({hasLogin:true},{where:{id:user.id}}).catch((err)=>{
+       console.log(err);
+     })
     } else {
       res.status(401).json({
         auth: false,

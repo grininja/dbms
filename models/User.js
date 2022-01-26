@@ -37,9 +37,12 @@ const User = (Sequelize, DataTypes) => {
     budget: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
-    }
+    },
+    hasLogin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   });
-
 };
 
 module.exports = User;
