@@ -27,9 +27,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Shubham Rai
-      </Link>{" "}
+      {"Shubham Rai"}
       {new Date().getFullYear()}
       {"."}
     </Typography>
@@ -118,14 +116,13 @@ export default function SignIn() {
             </Button>
             <Grid container justifyContent="flex-start">
               <Grid item>
-                <Link href="/">
-                  Sign up
-                </Link>
+                <Link href="/">Sign up</Link>
               </Grid>
             </Grid>
-            <Grid container justifyContent="flex-end">
+            <Grid container justifyContent="flex-start">
               <Grid item>
-                <ForgotPassword />
+              <Link href="/forgotpassword">Forgot password</Link>
+                {/* <ForgotPassword /> */}
               </Grid>
             </Grid>
           </Box>

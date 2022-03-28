@@ -65,9 +65,6 @@ const RenderTodos = () => {
                   >
                     &times;
                   </button>
-                  {/* <button onClick={() => handleAddTask(todo)} className="float-right add-btn">
-                Add task
-              </button> */}
                   <h5>
                     {i}. {todo.title}
                   </h5>

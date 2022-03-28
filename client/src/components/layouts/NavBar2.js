@@ -5,6 +5,10 @@ import jwtDecode from "jwt-decode";
 import { Context as AuthContext } from "../../context/AuthContext";
 import { NavLink, useNavigate } from "react-router-dom";
 // import Navbar from "react-bootstrap/Navbar";
+import {
+  Context as AdminContext,
+  Provider as AdminProvider,
+} from "../../context/AdminContext";
 import { Container } from "react-bootstrap";
 import {
   Navbar,
@@ -19,6 +23,7 @@ const TodoNavbar = () => {
     state: { user },
     setCurrentUser,
   } = useContext(AuthContext);
+  const { state: AdminState } = useContext(AdminContext);
   const history = useNavigate();
   const handleLogout = () => {
     Cookies.remove("token");
@@ -36,6 +41,11 @@ const TodoNavbar = () => {
         <Container>
           <Navbar.Brand href="/todos">TheProductiveDiary</Navbar.Brand>
           <Nav className="me-auto">
+          {AdminState.isAdmin && (
+            <Nav.Link href="/admin">
+              AdminDashBoard
+            </Nav.Link>
+          )}
             <Nav.Link href="/expense">Your Expenses</Nav.Link>
             <Nav.Link href="/story">Memories</Nav.Link>
             <Nav.Link href="/changepassword">Update Password</Nav.Link>

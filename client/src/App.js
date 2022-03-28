@@ -38,12 +38,15 @@ const App = () => {
         {state.isAuthenticated && (
           <Route path="/changepassword" exact element={<PassChanger />} />
         )}
-        {/* <Route path="/forgotpassword" exact element={<ForgotPassword />} /> */}
+         <Route path="/admin" exact element={<AdminDashboard />} />
+         {!state.isAuthenticated && (
+          <Route path="/forgotpassword" exact element={<ForgotPassword />} />
+        )}
         {!state.isAuthenticated && (
           <Route path="*" exact element={<SignUp />} />
         )}
         
-        <Route path="/admin" exact element={<AdminDashboard />} />
+       
 
       </Routes>
     </Router>

@@ -4,7 +4,6 @@ import {
   Context as AdminContext,
   Provider as AdminProvider,
 } from "../../context/AdminContext";
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -12,6 +11,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import AdminNavBar from "./AdminNavbar";
+// import AdminNavBar2 from "./AdminNavbarv2";
 const bull = (
   <Box
     component="span"
@@ -22,11 +22,11 @@ const bull = (
 );
 
 const OutlinedCard = (props) => {
-  const {deleteuser} = useContext(AdminContext);
+  const { deleteuser } = useContext(AdminContext);
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(e.target.value);
-    deleteuser(Cookies,e.target.value);
+    deleteuser(Cookies, e.target.value);
     window.location.reload();
   };
   return (
@@ -79,9 +79,19 @@ const AdminDashboard = () => {
   return (
     <div>
       <AdminNavBar />
-      <h1>Admin Dashboard</h1>
-      <p>You are logged in as admin</p>
-      <p>Users Count:- {userList.length}</p>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ul>
+          <h1>Admin Dashboard</h1>
+           <h3>Users Count:- {userList.length}</h3>
+        </ul>
+      
+      </div>
       <ul>
         {userList.map((user) => {
           // return <li key={user.id}>{user.firstName + " " + user.lastName}</li>;

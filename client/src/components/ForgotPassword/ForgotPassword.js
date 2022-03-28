@@ -5,10 +5,10 @@ import apiCall from "../../apiCall";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
-import ModalBody from "react-bootstrap/ModalBody";
-import ModalHeader from "react-bootstrap/ModalHeader";
-import ModalFooter from "react-bootstrap/ModalFooter";
-import ModalTitle from "react-bootstrap/ModalTitle";
+// import ModalBody from "react-bootstrap/ModalBody";
+// import ModalHeader from "react-bootstrap/ModalHeader";
+// import ModalFooter from "react-bootstrap/ModalFooter";
+// import ModalTitle from "react-bootstrap/ModalTitle";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -19,12 +19,16 @@ const ForgotPassword = () => {
       email: email,
     };
     const response = await apiCall("/forgotPassword", "POST", data, null);
+    console.log(response.data.message);
     if (response.data.message === "success") {
+      setTimeout(() => {
+        alert("new password sent to your mail");
+      }, 50);
       navigate("/login");
     } else {
-      alert(response.data.message);
+      alert("Try again");
     }
-    console.log(response.data.message);
+
     console.log(email);
   };
 
@@ -50,16 +54,19 @@ const ForgotPassword = () => {
 };
 
 function Example() {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
+  const [show, setShow] = useState(true);
+  const navigate = useNavigate();
+  const handleClose = () => {
+    setShow(false);
+    navigate("/login");
+  };
   const handleShow = () => setShow(true);
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      {/* <Button variant="primary" onClick={handleShow}>
         Forgot Password?
-      </Button>
+      </Button> */}
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
